@@ -12,7 +12,7 @@ def check_args():
         print("Usage: {sys.argv[0]} <root-dir> <github-access-token>")
         exit(1)
 
-@retry(wait=wait_exponential())
+@retry(wait=wait_exponential(multiplier=1, min=4, max=10))
 def download_branch_zipball(curl_args):
     return_code = os.system(" ".join(curl_args))
     if return_code != 0:
