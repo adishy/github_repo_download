@@ -1,7 +1,9 @@
 from github import Github
 from os import environ as env
 import os
+import subprocess
 import sys
+import time
 
 def check_args():
     if len(sys.argv) < 3:
@@ -19,13 +21,27 @@ def main():
     
     user = client.get_user()
     for repo in user.get_repos():
-        owner = repo.owner
+        owner = repo.owner.login
         name = repo.name
+        print("Repository name:", name, "Owner:", owner)
         branches = list(repo.get_branches())
-        os.makedirs(os.path.join(root_dir, name), exist_ok=True)
+        repo_dir_path = os.path.join(root_dir, name)
+        os.makedirs(repo_dir_path, exist_ok=True)
         for branch in branches:
-            os.makedirs(os.path.join(root_dir, name, branch.name), exist_ok=True)
-        print(f"Name: {name}, Branches: {[ branch.name for branch in branches ]}")
+            branch_dir_path = os.path.join(root_dir, name, f"{branch.name}.zip")
+            full_url = f"https://api.github.com/repos/{owner}/{name}/zipball/{branch.name}"
+            download_zip = \
+                [
+                  "curl",
+                  "-H", "\"Accept: application/vnd.github.v3+json\"",
+                  "-H", f"\"Authorization: token {access_token}\"",
+                  "-L", full_url,
+                  ">", branch_dir_path
+                ]
+            print("   Branch:", branch.name, f"({full_url})")
+            print("   curl:", " ".join(download_zip))
+            os.system(" ".join(download_zip))
+            time.sleep(0.75)
 
 if __name__ == "__main__":
     main()
