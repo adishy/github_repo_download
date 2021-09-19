@@ -3,15 +3,18 @@ const fs = require('fs');
 const GitHub = require('github-api');
 const path = require('path');
 
+/**
+ checkArgs: return expected command-line args provided, show usage information if incorrectly used
+**/
 function checkArgs() {
     let requiredArgs =
     [ 
-        { name: "rootDir", show: "root-dir", required: true },
-        { name: "token", show: "github-personal-access-token", required: true },
-        { name: "archiveFormat", show: "archive-format: [zip (default), tar]", required: false }
+        { name: "rootDir", show: "root-dir" },
+        { name: "token", show: "github-personal-access-token" },
+        { name: "archiveFormat", show: "archive-format: [zip, tar]" }
     ];
     if ( process.argv.length < 2 + requiredArgs.length  ) {
-        let argsDisplay = requiredArgs.map( arg => `${ ( arg.required ) ? "reqd" : "opt"}:<${arg.show}>` ).join(" ");
+        let argsDisplay = requiredArgs.map( arg => `<${arg.show}>` ).join(" ");
         console.log(`Usage:\n ${process.argv[0]} ${process.argv[1]} ${argsDisplay}`);
         process.exit(1);
     }
@@ -35,6 +38,9 @@ function checkArgs() {
         token: <str>, // Personal access token with scopes to retrieve repo archive
         destinationDir: <str> // Destination directory to which zipball should be downloaded
     }
+ format: 
+    Describes the archive format in which the branches will be stored
+    Options: [ "zip", "tar" ]
 **/
 function downloadArchive(args, format="tar") {
     let archiveFormats =
@@ -42,7 +48,8 @@ function downloadArchive(args, format="tar") {
         "tar": ".tar.gz",
         "zip": ".zip"
     };
-    let fullUrl = `https://api.github.com/repos/${args.owner}/${args.repo}/${format}ball/${args.branch}`;
+    let sanitizedBranchName = args.branch.replace("/", "-");
+    let fullUrl = `https://api.github.com/repos/${args.owner}/${args.repo}/${format}ball/${sanitizedBranchName}`;
     let archivePath = path.join(args.destinationDir, `${args.branch}${archiveFormats[format]}`);
     if ( fs.existsSync(archivePath) ) fs.unlinkSync(archivePath);
     let curlArgs = 
