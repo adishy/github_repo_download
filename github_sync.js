@@ -48,7 +48,7 @@ function downloadArchive(args, format="tar") {
         "tar": ".tar.gz",
         "zip": ".zip"
     };
-    let sanitizedBranchName = args.branch.replace("/\//g", "-");
+    let sanitizedBranchName = args.branch.replace(/\//g, "-");
     let fullUrl = `https://api.github.com/repos/${args.owner}/${args.repo}/${format}ball/${sanitizedBranchName}`;
     let archivePath = path.join(args.destinationDir, `${args.branch}${archiveFormats[format]}`);
     if ( fs.existsSync(archivePath) ) fs.unlinkSync(archivePath);
