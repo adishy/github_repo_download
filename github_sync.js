@@ -53,14 +53,7 @@ function downloadArchive(args, format="tar") {
       "-L", fullUrl,
       ">", archivePath
     ];
-    function handleDownloadError(error, stdout, stderr) {
-        if ( error ) {
-            console.log(" [FAILED!]");
-            console.error(download.error);
-            process.exit(1);
-        }
-    }
-    let download = execSync(curlArgs.join(" "), handleDownloadError);
+    execSync(curlArgs.join(" "));
 }
 
 async function main() {
@@ -89,7 +82,7 @@ async function main() {
         let allBranches = await repository.listBranches();
         let branches = allBranches.data;
         let branchNames = branches.map( branch => branch.name ); 
-        process.stdout.write(`(${index + 1}/${repositories.length}): ${repo.name} - ${branchNames}`);
+        console.log(`(${index + 1}/${repositories.length}): ${repo.name} - ${branchNames}`);
 
         for ( branch of branchNames ) {
             let archiveFormat = "zip";
@@ -106,7 +99,7 @@ async function main() {
                            );            
             await new Promise(r => setTimeout(r, 1000));
         }
-        console.log(" [DONE!]");
+        console.log("[DONE!]\n");
     }
 }
 
