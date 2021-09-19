@@ -1,12 +1,45 @@
-### Github Repository Downloader
+# Github Repository Downloader
 
-* This is a script that downloads all the repositories from a user's Github account as zip archives.
+* This repository contains Python and NodeJS scripts that download all the repositories from a user's Github account as tar/zip archives.
 * A directory corresponding to each repository is created under the specified root directory. Each branch in a repository is downloaded as 
   a separate zip archive in the corresponding repository directory. 
-  * If a zip archive for a branch already exists in the directory corresponding to a repository, it is deleted and redownloaded
+  * If an archive for a branch already exists in the directory corresponding to a repository, it is deleted and redownloaded
+
+## NodeJS Version:
+
+### Installation and Usage
+```
+# Clone the repository
+git clone https://github.com/adishy/github_repo_download
+cd github_repo_download
+
+# Ensure node / npm is installed and available in the environment where the script will be run
+# Install dependencies
+# Note: Please ensure curl is installed and available in the environment where the script will be run
+#       Run `curl --version` to test whether curl is installed in your environment
+npm install
+
+# Download archives as zip
+node github_sync.js <root-dir> <github-personal-access-token> zip
+
+# Download archives as tar
+node github_sync.js <root-dir> <github-personal-access-token> tar
+```
+#### Dependencies
+* [`github-api`](https://www.npmjs.com/package/github-api)
+* shells out to `curl`
+
+--- 
+
+## Python Version:
   
 #### Installation and Usage
 ```
+# Clone the repository
+git clone https://github.com/adishy/github_repo_download
+cd github_repo_download
+
+# Ensure python3 / pip3 is installed and available in the environment where the script will be run
 # Create a Python3 virtual env and enable the env
 python3 -m venv env
 source env/bin/activate
@@ -30,3 +63,5 @@ python github_sync.py <root-dir> <github-personal-access-token>
 * [`PyGithub`](https://github.com/PyGithub/PyGithub)
 * [`tenacity`](https://tenacity.readthedocs.io/en/latest/)
 * shells out to `curl`
+
+---
