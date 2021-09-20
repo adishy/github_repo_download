@@ -25,6 +25,13 @@ node github_sync.js <root-dir> <github-personal-access-token> zip
 # Download archives as tar
 node github_sync.js <root-dir> <github-personal-access-token> tar
 ```
+* Example:  
+  `node github_sync.js /tmp/test/ mytokenhere zip`
+* `root-dir` : The destination directory to which the repositories will be downloaded into
+* `github-personal-access-token`: Create a [Github personal access token](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) 
+   which has at least read access to the `repo` and `admin:org` scopes.
+* `archive-format`: The format in which the archive files will be downloaded as. Options are: "zip" and "tar".
+
 #### Dependencies
 * [`github-api`](https://www.npmjs.com/package/github-api)
 * shells out to `curl`
